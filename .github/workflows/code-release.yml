@@ -22,4 +22,9 @@ jobs:
         uses: google-github-actions/release-please-action@v4
         with:
           release-type: simple
+          target-branch: ${{ github.ref_name }}
+          # optional. customize path to release-please-config.json
+          config-file: release-please-config.json
+          # optional. customize path to .release-please-manifest.json
+          manifest-file: release-please-config.json
           token: ${{ secrets.RELEASE_ACTION_GIT_ACCESS_TOKEN }}

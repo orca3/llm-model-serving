@@ -1,0 +1,10 @@
+{
+    "bump-minor-pre-major": true,
+    "bump-path-for-minor-pre-major": true,
+    "packages": {
+        ".": {
+            "package-name": "llm-serving"
+        }
+      }
+
+}
