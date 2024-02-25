@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/orca3/llm-model-serving/compare/v0.1.0...v0.1.1) (2024-02-25)
+
+
+### Bug Fixes
+
+* fix release pipeline ([#12](https://github.com/orca3/llm-model-serving/issues/12)) ([dd7aae4](https://github.com/orca3/llm-model-serving/commit/dd7aae41a464b8fa39e1a994e0c6d53d4b417185))
+
 ## 0.1.0 (2024-02-25)
 
 
