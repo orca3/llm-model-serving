@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/orca3/llm-model-serving/compare/v0.1.0...v0.2.0) (2024-02-25)
+
+
+### Features
+
+* new feature ([ad69c1f](https://github.com/orca3/llm-model-serving/commit/ad69c1f645369925984c5155fe7a1a652de05a75))
+
 ## 0.1.0 (2024-02-25)
 
 
