@@ -9,12 +9,15 @@
 
 name: Publish Docker image
 
+# build and push docker image when image push to main, new tag created and new release published.
 on:
   push:
     branches:
       - 'main'
       # - 'chi'
       # - 'releases/**'
+    tags:
+      - "v*.*.*"
   release:
     types: [published]
 

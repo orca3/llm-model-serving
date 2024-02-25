@@ -1,14 +1,36 @@
 name: github-actions-helloworld
-run-name: GitHub Actions Hello World by ${{ github.actor }} 
-on: [push]
+run-name: GitHub Actions Tests by ${{ github.actor }} 
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches:
+      - "main"
+
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '14'
+      # - run: npm install -g bats
+      # - run: bats -v
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          images: orca3ai/demo-image
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
  
