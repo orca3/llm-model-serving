@@ -12,8 +12,8 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - 'main'
-      - 'chi'
+      # - 'main'
+      # - 'chi'
       - 'releases/**'
   release:
     types: [published]
@@ -32,6 +32,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
+      # https://docs.docker.com/build/ci/github-actions/manage-tags-labels/
+      # https://github.com/marketplace/actions/docker-metadata-action
+      # https://github.com/docker/metadata-action
+      
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
@@ -44,5 +48,5 @@ jobs:
           context: .
           file: ./images/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
