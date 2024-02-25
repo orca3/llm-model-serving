@@ -22,7 +22,4 @@ jobs:
         uses: google-github-actions/release-please-action@v4
         with:
           release-type: simple
-          package-name: release
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
           token: ${{ secrets.RELEASE_ACTION_GIT_ACCESS_TOKEN }}
