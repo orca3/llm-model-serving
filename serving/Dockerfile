@@ -6,6 +6,8 @@ RUN pip3 install -r requirements.txt
 RUN mkdir -p /home/serving
 
 COPY ./inference /home/serving/inference
+COPY ./models /home/serving/models
+
 WORKDIR /home/serving/inference
 
 EXPOSE 80
