@@ -1,0 +1,29 @@
+services:
+  inference:
+    image: orca3ai/inference:latest
+    ports:
+      - "8002:80"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/home/serving/models
+  torchserve:
+    image: pytorch/torchserve:0.1.1-cpu
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/home/model-server/model-store:ro
+      - ../predictor/torchserve/config.properties:/home/model-server/config.properties:ro
+networks:
+  llm-serving: {}
+volumes:
+  models:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ../models
+      o: bind

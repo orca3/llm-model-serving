@@ -1,0 +1,10 @@
+{
+	"info": {
+		"_postman_id": "aaffd767-7eaf-4435-85c5-f89633dfbaff",
+		"name": "llm_model_inference",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29972367",
+		"_collection_link": "https://www.postman.com/mission-meteorologist-32752023/workspace/llm-model-serving/collection/29972367-aaffd767-7eaf-4435-85c5-f89633dfbaff?action=share&source=collection_link&creator=29972367"
+	},
+	"item": []
+}
