@@ -45,15 +45,18 @@ For debuging in VSCode, use the following configuration. Note: make sure to open
 
 ### Docker
 
+Add "--platform linux/amd64" in docker command for build and run, since I'm using M1.
+ 
 build the image
 cd serving
-docker build . -t orca3ai/serving
+docker build . -t orca3ai/inference
 
 check directory structure
-docker run -it orca3ai/inference:latest bash
+docker run --rm -it orca3ai/inference:latest bash
 
 run docker image
 docker run --rm -p 8002:80 orca3ai/inference:latest
+docker run --rm -p 8002:80 -v "$(pwd)"/../models:/home/serving/models orca3ai/inference:latest
 
 test
 curl http://localhost:8002

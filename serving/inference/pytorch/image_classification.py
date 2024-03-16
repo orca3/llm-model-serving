@@ -6,6 +6,9 @@ from torchvision import models
 from PIL import Image
 
 class DenseNet:
+    """
+    Code is developed based on the following pytorch example: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
+    """
     _instance = None
 
     @classmethod
