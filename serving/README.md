@@ -43,6 +43,24 @@ For debuging in VSCode, use the following configuration. Note: make sure to open
 }
 ```
 
+curl request:
+```
+
+# test llm predict
+curl --location 'http://127.0.0.1:8002/llm/predict' \
+--header 'Content-Type: application/json' \
+--data '{
+    "prompt": "What is the capital of USA?"
+}'
+
+# test llm streaming endpoint
+curl --location 'http://127.0.0.1:8002/llm/stream' \
+--header 'Content-Type: application/json' \
+--data '{
+    "prompt": "What is the capital of USA?"
+}'
+```
+
 ### Docker
 
 Add "--platform linux/amd64" in docker command for build and run, since I'm using M1.

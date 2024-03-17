@@ -1,0 +1,1 @@
+Paste the following link to download llama-2-7b.Q2_K.gguf to this folder: https://onedrive.live.com/download?resid=64AE56370B1E1602%21454207&authkey=!AEuOx1_Zh9RzzRA

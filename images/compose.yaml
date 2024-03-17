@@ -7,6 +7,8 @@ services:
       - llm-serving
     volumes:
       - models:/home/serving/models
+    environment:
+      - PREDICTOR_TYPE="docker"
   torchserve:
     image: pytorch/torchserve:0.1.1-cpu
     ports:
@@ -18,6 +20,17 @@ services:
     volumes:
       - models:/home/model-server/model-store:ro
       - ../predictor/torchserve/config.properties:/home/model-server/config.properties:ro
+  llm:
+    image: orca3ai/llm-predictor
+    ports:
+      - "9090:5000"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/usr/src/app/models:ro
+    environment:
+      - MODEL_DIR="./models/llama"
+      - HOST_IP="0.0.0.0"
 networks:
   llm-serving: {}
 volumes:
