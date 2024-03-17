@@ -9,4 +9,4 @@ Git Large File Storage is used in this repo since it contains some large model f
 * [images](./images/README.md): instructions (on docker compose) to run the backend model serving service locally, this is required for the labs. 
 * [serving](./serving/README.md): model inference service, a Python Flask based RESTful service, hosts all the public model inference API. This service also works as a web proxy which route the prediction requests to different predictors behind. 
 * [precitor](./predictor/): examples of differnet model precitors, such as [TorchServe](./predictor/torchserve/README.md) and self-developed predictors.   
-* [.github](./.github/README.md): CI/CD files, the configured github workflow will create new release, build docker image and push to dockerhub automatically. 
+* [.github](./.github/BuildInstruction.md): CI/CD files, the configured github workflow will create new release, build docker image and push to dockerhub automatically. 
