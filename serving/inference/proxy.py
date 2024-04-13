@@ -14,7 +14,7 @@ def torch_predict(model_name):
         model_name = "resnet-152-batch_v2"
         
     host = "torchserve" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    domain = "http://{0}:8080".format(host)
+    domain = "http://{0}:9050".format(host)
     
     res = requests.get(
         url="{0}/predictions/{1}".format(domain, model_name), 
@@ -26,7 +26,7 @@ def torch_predict(model_name):
 def torch_list_models(model):
     
     host = "torchserve" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    domain = "http://{0}:8081".format(host)
+    domain = "http://{0}:9051".format(host)
     
     res = requests.get("{0}/models".format(domain))
     return res.content
@@ -68,13 +68,17 @@ def llm_predict():
     host = "llm" if 'PREDICTOR_TYPE' in os.environ else "localhost"
     url = "http://{0}:9090/predict".format(host)
     
-    response = requests.post(
-        url,
-        params={"model": "llama-2-7b"},
-        json= {"prompt": prompt}
-    )
+    try:
+        response = requests.post(
+            url,
+            params={"model": "llama-2-7b"},
+            json= {"prompt": prompt}
+        )
+        
+        return response.content
+    finally:
+        response.close()
     
-    return response.content
    
 # TODO: GRPC example for talking to predictor  
 @app.route('/torch/image/predict_grpc', defaults={'model_name': None}, methods=['POST'])
