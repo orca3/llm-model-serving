@@ -1,0 +1,42 @@
+services:
+  inference:    # proxy service
+    image: orca3ai/inference:latest
+    ports:
+      - "9020:80"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/home/models
+    environment:
+      - PREDICTOR_TYPE=docker
+  torchserve-predictor:   # native pytorch predictor
+    image: pytorch/torchserve:0.1.1-cpu
+    ports:
+      - "9050:8080"
+      - "9051:8081"
+      - "9052:8082"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/home/model-server/model-store:ro
+      - ../predictor/torchserve/config.properties:/home/model-server/config.properties:ro
+  llm-predictor:    # customized llama2 model predictor (built on llama-cpp-python)
+    image: orca3ai/llm-predictor:latest
+    ports:
+      - "9090:5000"
+    networks:
+      - llm-serving
+    volumes:
+      - models:/usr/src/app/models:ro
+    environment:
+      - MODEL_DIR=./models/llama
+      - HOST_IP=0.0.0.0
+networks:
+  llm-serving: {}
+volumes:
+  models:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ../models
+      o: bind

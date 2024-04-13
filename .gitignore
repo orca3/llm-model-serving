@@ -14,3 +14,5 @@ dist*
 build*
 *.egg-info/
 .DS_Store
+
+llama-2-7b.Q2_K.gguf

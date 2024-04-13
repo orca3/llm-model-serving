@@ -1,4 +1,4 @@
-import io, json, re
+import io, json, re, os
 
 import torch
 import torchvision.transforms as transforms
@@ -10,6 +10,7 @@ class DenseNet:
     Code is developed based on the following pytorch example: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
     """
     _instance = None
+    model_dir = "../../models"
 
     @classmethod
     def load_densenet121_state_dict(cls):
@@ -21,8 +22,10 @@ class DenseNet:
         pattern = re.compile(
             r"^(.*denselayer\d+\.(?:norm|relu|conv))\.((?:[12])\.(?:weight|bias|running_mean|running_var))$"
         )
+        
+        print(os.getcwd())
 
-        state_dict = torch.load(f='../models/densenet121/densenet121-a639ec97.pth', weights_only=True)
+        state_dict = torch.load(f='{0}/densenet121/densenet121-a639ec97.pth'.format(cls.model_dir), weights_only=True)
         for key in list(state_dict.keys()):
             res = pattern.match(key)
             if res:
@@ -57,7 +60,7 @@ class DenseNet:
             
             # Since we are using our model only for inference, switch to `eval` mode:
             cls._instance.model.eval()
-            cls._instance.imagenet_class_index = json.load(open('../models/densenet121/imagenet_class_index.json'))
+            cls._instance.imagenet_class_index = json.load(open('{0}/densenet121/imagenet_class_index.json'.format(cls.model_dir)))
             
         return cls._instance
 
