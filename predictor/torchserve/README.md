@@ -1,8 +1,10 @@
-# Torchserve Predictor Local Setup
+# Torchserve Predictor
 
-The example here comes from: [Batch Inference with TorchServe](https://github.com/pytorch/serve/blob/master/docs/batch_inference_with_ts.md)
+A example for how to use torchserve image to serve resnet model. This sample is extended from: [Batch Inference with TorchServe](https://github.com/pytorch/serve/blob/master/docs/batch_inference_with_ts.md)
 
 Note: Please ensure port `9050`, `9051`, `9052` are not occupied. Now, let's run the torchserve container locally.
+
+## Local setup and test
 
 1. Move to the `root (llm-model-serving)` folder and run:
     ```docker

@@ -4,6 +4,9 @@ import os
 
 import requests
 
+torchserve_host = "torchserve-predictor"
+llm_host = "llm-predictor"
+
 @app.route('/torch/image/predict', defaults={'model_name': None}, methods=['POST'])
 @app.route('/torch/image/predict/<model_name>', methods=['POST'])
 def torch_predict(model_name):
@@ -13,8 +16,8 @@ def torch_predict(model_name):
     if not model_name:
         model_name = "resnet-152-batch_v2"
         
-    host = "torchserve" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    domain = "http://{0}:9050".format(host)
+    host = torchserve_host+":8080" if 'PREDICTOR_TYPE' in os.environ else "localhost:9050"
+    domain = "http://{0}".format(host)
     
     res = requests.get(
         url="{0}/predictions/{1}".format(domain, model_name), 
@@ -25,8 +28,8 @@ def torch_predict(model_name):
 @app.route('/torch/models/{model}', methods=['GET'])
 def torch_list_models(model):
     
-    host = "torchserve" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    domain = "http://{0}:9051".format(host)
+    host = torchserve_host+":8081" if 'PREDICTOR_TYPE' in os.environ else "localhost:9051"
+    domain = "http://{0}".format(host)
     
     res = requests.get("{0}/models".format(domain))
     return res.content
@@ -37,8 +40,8 @@ def llm_stream():
     data = request.get_json()
     prompt = data['prompt']
     
-    host = "llm" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    url = "http://{0}:9090/stream".format(host)
+    host = llm_host+":5000" if 'PREDICTOR_TYPE' in os.environ else "localhost:9090"
+    url = "http://{0}/stream".format(host)
     
     response = requests.post(
         url,
@@ -65,8 +68,8 @@ def llm_predict():
     data = request.get_json()
     prompt = data['prompt']
     
-    host = "llm" if 'PREDICTOR_TYPE' in os.environ else "localhost"
-    url = "http://{0}:9090/predict".format(host)
+    host = llm_host+":5000" if 'PREDICTOR_TYPE' in os.environ else "localhost:9090"
+    url = "http://{0}/predict".format(host)
     
     try:
         response = requests.post(

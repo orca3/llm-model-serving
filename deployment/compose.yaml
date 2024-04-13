@@ -2,14 +2,14 @@ services:
   inference:    # proxy service
     image: orca3ai/inference:latest
     ports:
-      - "9010:80"
+      - "9020:80"
     networks:
       - llm-serving
     volumes:
       - models:/home/models
     environment:
       - PREDICTOR_TYPE=docker
-  torchserve:   # native pytorch predictor
+  torchserve-predictor:   # native pytorch predictor
     image: pytorch/torchserve:0.1.1-cpu
     ports:
       - "9050:8080"
@@ -20,7 +20,7 @@ services:
     volumes:
       - models:/home/model-server/model-store:ro
       - ../predictor/torchserve/config.properties:/home/model-server/config.properties:ro
-  llm:    # customized llama2 model predictor (built on llama-cpp-python)
+  llm-predictor:    # customized llama2 model predictor (built on llama-cpp-python)
     image: orca3ai/llm-predictor:latest
     ports:
       - "9090:5000"

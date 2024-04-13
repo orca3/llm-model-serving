@@ -1,5 +1,11 @@
 FROM python:3.11
 
+# Install ping and netcat for network troublehsooting
+RUN apt-get update && apt-get install -y \
+    iputils-ping \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY ./requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
