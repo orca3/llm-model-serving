@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variable for CMAKE_ARGS
-ENV CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
+# ENV CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
 
 # Copy the current directory contents into the container at /usr/src/app
 COPY ./predictor/llm/ .
@@ -20,7 +20,7 @@ COPY ./predictor/llm/ .
 # COPY ./models/llama/llama-2-7b.Q2_K.gguf ./models/
 
 # Install Python packages
-RUN pip install --no-cache-dir llama-cpp-python
+# RUN pip install --no-cache-dir llama-cpp-python
 RUN pip install -r requirements.txt
 
 EXPOSE 5000
