@@ -25,6 +25,15 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - context: ./serving
+            dockerfile: ./serving/Dockerfile
+            image_name: orca3ai/inference
+          - context: .
+            dockerfile: ./predictor/llm/Dockerfile
+            image_name: orca3ai/llm-predictor
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -43,7 +52,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: orca3ai/demo-image
+          images: ${{ matrix.image_name }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -54,8 +63,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./images/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
