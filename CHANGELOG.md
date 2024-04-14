@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0](https://github.com/orca3/llm-model-serving/compare/v0.1.2...v0.2.0) (2024-04-13)
+
+
+### Features
+
+* bootstrap the inference service with flask, also includes a working docker file. ([#19](https://github.com/orca3/llm-model-serving/issues/19)) ([9939067](https://github.com/orca3/llm-model-serving/commit/9939067282cee4bf083863e2820cf4b4c24fd6fc))
+* Model Inference service, TorchServe predictor, Compose file for local lab, Readme updates ([#22](https://github.com/orca3/llm-model-serving/issues/22)) ([096336e](https://github.com/orca3/llm-model-serving/commit/096336e03e8618022175c83b084f62b253f18230))
+
+
+### Bug Fixes
+
+* enable git large file ([5c9bd17](https://github.com/orca3/llm-model-serving/commit/5c9bd178a6d1f1c24164dd7e0a4964d24c044c02))
+
 ## [0.1.2](https://github.com/orca3/llm-model-serving/compare/v0.1.1...v0.1.2) (2024-02-25)
 
 
