@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/orca3/llm-model-serving/compare/v0.2.0...v0.3.0) (2024-04-14)
+
+
+### Features
+
+* set docker build and publish workflow ([9645c54](https://github.com/orca3/llm-model-serving/commit/9645c54afd493f62d9f860764fa3c8c750975a63))
+
 ## [0.2.0](https://github.com/orca3/llm-model-serving/compare/v0.1.2...v0.2.0) (2024-04-13)
 
 
