@@ -1,6 +1,8 @@
 # Setup Instruction
 Here are the instructions to deploy/run the lab services on your local computer. 
 
+All the docker images in this repo can be found at [dockerhub/orca3ai](https://hub.docker.com/u/orca3ai).
+
 ## Prerequisite 
 1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) (4.27.2 and above) is highly recommended, since it contains docker engine and Docker compose, which are required to run the label. You can also install docker engine and compose separately.   
 2. Make sure ports `9020`, `9050`, `9051`, `9052` and `9090` are free on your local computer.

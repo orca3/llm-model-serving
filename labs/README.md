@@ -1,4 +1,17 @@
 # Lab
+
+## Prerequisite
+1. Run the lab services on your local by following the instructions [lab deployment](./../deployment/README.md).
+2. Activate virtual environment
+```sh
+conda create -n lab python=3.11
+conda activate lab
+
+pip install -r requirements.txt
+
+conda deactivate # deactivate the environment
+```
+
 ## Lab Structure
 [TODO]
 1. Jupyter Notebooks

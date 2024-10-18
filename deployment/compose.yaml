@@ -1,6 +1,6 @@
 services:
   inference:    # proxy service
-    image: orca3ai/inference:latest
+    image: orca3ai/inference:0.3
     ports:
       - "9020:80"
     networks:
@@ -21,7 +21,7 @@ services:
       - models:/home/model-server/model-store:ro
       - ../predictor/torchserve/config.properties:/home/model-server/config.properties:ro
   llm-predictor:    # customized llama2 model predictor (built on llama-cpp-python)
-    image: orca3ai/llm-predictor:latest
+    image: orca3ai/llm-predictor:0.3-chi-mac
     ports:
       - "9090:5000"
     networks:
