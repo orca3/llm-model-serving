@@ -73,7 +73,6 @@ Code repository for book: "Serving and Optimizing LLMs",
 * **Appendix F: vLLM Crash Course**
 
 
-
 ## Lab Architecture 
 We developed this lab to provide a practical, hands-on introduction to the fundamentals of model serving. Our goal is for you to understand the basic principles, which will help make sense of the more complex model serving frameworks and solutions used in real-world applications once you grasp these foundational concepts.
 
