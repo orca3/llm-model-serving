@@ -19,63 +19,58 @@ Code repository for book: "Serving and Optimizing LLMs",
     * Large Language Model Use Cases
     * Common Large Language Model Serving Paradigms
 
-Chapter 3 Model serving Best Practice and Case studies
-Learn how to design and implement a model serving solution that fits your own needs from scratch.
-3.1 Common Model Serving Design Principles
-3.2 Implement Model Serving from Scratch
-Model management, multiple endpoints, ….
-3.3 Implement Model Serving with AWS SageMaker
-3.4 Implement LLM model serving from Scratch
-3.5 Implement LLM Model Serving with AWS SageMaker
-3.6 Implement Multi-Agent System with LLM model from Scratch
+* **Chapter 3 Model serving Best Practice and Case studies**
+    * Common Model Serving Design Principles
+    * Implement Model Serving from Scratch
+    * Implement Model Serving with AWS SageMaker
+    * Implement LLM model serving from Scratch
+    * Implement LLM Model Serving with AWS SageMaker
+    * Implement Multi-Agent System with LLM model from Scratch
 
-Chapter 4 Performance Challenges when Serving LLMs 
-Understand motivation and challenges for optimizing LLM models 
-4.1 Why optimize LLMs serving
-4.2 LLM model Architecture
-4.3 Performance Measurement
-4.4 Challenges:
-4.4.1 Model Size
-4.4.2 Batching
-4.4.3 Attention Calculation
-4.4.4 Parallelism
-4.4.5 Evaluation
+* **Chapter 4 Performance Challenges when Serving LLMs** 
+    * Why optimize LLMs serving
+    * LLM model Architecture
+    * Performance Measurement
+    * Challenges:
+        * Model Size
+        * Batching
+        * Attention Calculation
+        * Parallelism
+        * Evaluation
 
-Chapter 5 Black Box Optimization Techniques
-Learn the universal optimization techniques (regardless the LLM architecture) 
-5.1 Quantization
-5.2 Multi GPU and Hosts Inferencing
-5.3 Hardware and Software Selection
+* **Chapter 5 Black Box Optimization Techniques** 
+    * Quantization
+    * Multi GPU and Hosts Inferencing
+    * Hardware and Software Selection
 
-Chapter 6 LLM Specific Optimization Techniques
-Learn the optimization techniques that are specifically designed for Transformer based LLM models.
-6.1 Optimize Batching 
-6.1.1 Dynamic Batching
-6.1.2 Continuous Batching
-6.1.3 Chunked prefill
-6.2 Optimize Attention Calculation
-6.2.1 CUDA Kernel
-6.3 Speculative Decoding
-6.4 Parallelism Improvement
-6.5 Optimization frameworks Overview 
-6.5.1 FasterTransformer 
-6.5.2 TensorRT LLM
-6.5.3 DeepSpeed
-6.5.4 vLLM
-6.5.5 Llama cpp
+* **Chapter 6 LLM Specific Optimization Techniques** 
+    * Optimize Batching 
+        * Dynamic Batching
+        * Continuous Batching
+        * Chunked prefill
+    * Optimize Attention Calculation
+        * CUDA Kernel
+    * Speculative Decoding
+    * Parallelism Improvement
+    * Optimization frameworks Overview 
+        * FasterTransformer 
+        * TensorRT LLM
+        * DeepSpeed
+        * vLLM
+        * Llama cpp
 
-Chapter 7 LLM Serving Optimization Best Practice and Case Study
-Teach how to complete a model optimization project from scratch
-7.1 Optimization Principles
-7.2 Validation Metrics and Methods
-7.3 Common LLM Optimization Workflow
-7.4 Optimize a Mistra 7B model end-to-end.
+* **Chapter 7 LLM Serving Optimization Best Practice and Case Study**
+    * Optimization Principles
+    * Validation Metrics and Methods
+    * Common LLM Optimization Workflow
+    * Optimize a Mistra 7B model end-to-end.
 
-Appendix A: Setup Local Labs with docker
-Appendix B: Setup Google Colab Labs for GPU scenario
-Appendix C: Understand Transformer Model with GPT2
-Appendix D: Attention Calculation Deep Dive
-Appendix E: vLLM Crash Course
+* **Appendix A: Setup Local Labs with docker**
+* **Appendix B: Setup Google Colab Labs for GPU scenario**
+* **Appendix C: Triton Crash Course**
+* **Appendix D: Understand Transformer Model with GPT2**
+* **Appendix E: Attention Calculation Deep Dive**
+* **Appendix F: vLLM Crash Course**
 
 
 ## Lab Architecture 
