@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 class WorkloadManager:
     def __init__(self):
         self.requests = []
-        self.batch_size = 1  # For simplicity, we'll process one request at a time
+        self.batch_size = 4  # Process up to 4 requests at a time
     
     def add_request(self, prompt: str) -> str:
         request_id = str(uuid.uuid4())
