@@ -1,5 +1,5 @@
 import multiprocessing as mp
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Generator
 from .model_manager import ModelManager
 import torch
 import logging
@@ -19,12 +19,14 @@ class ModelWorker:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         logger.debug(f"Loading model {model_name} on device {self.device}")
         self.model, self.tokenizer = ModelManager().load_model(model_name)
+        # Initialize state for streaming
+        self.stream_states = {}  # request_id -> (input_ids, attention_mask, past_key_values)
     
     def generate(self, prompts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         logger.debug(f"Received prompts: {prompts}")
         results = []
         for prompt_data in prompts:
-            inputs = self.tokenizer(prompt_data['prompt'], return_tensors="pt").to(self.device)
+            inputs = self.tokenizer(prompt_data.prompt, return_tensors="pt").to(self.device)
             
             # Generate text
             with torch.no_grad():
@@ -39,12 +41,59 @@ class ModelWorker:
             logger.debug(f"Generated text: {generated_text}")
             
             results.append({
-                'request_id': prompt_data['request_id'],
+                'request_id': prompt_data.id,
                 'generated_text': generated_text
             })
         
         return results
-    
+
+    def generate_forward_batch(self, prompts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Generate one token for each prompt in the batch."""
+        logger.debug(f"Received streaming prompts: {prompts}")
+        
+        # Add padding token to the tokenizer if not present
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+        
+        # Tokenize all prompts in batch
+        encoded = self.tokenizer(
+            [p['prompt'] for p in prompts],
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=512
+        ).to(self.device)
+        
+        logger.debug(f"Batch input shape: {encoded.input_ids.shape}")
+        
+        # Generate next token
+        with torch.no_grad():
+            outputs = self.model(
+                input_ids=encoded.input_ids,
+                attention_mask=encoded.attention_mask,
+                use_cache=False
+            )
+            
+            # Get next token logits and sample
+            next_token_logits = outputs.logits[:, -1, :]
+            next_token = torch.multinomial(
+                torch.softmax(next_token_logits / 0.7, dim=-1),
+                num_samples=1
+            ).squeeze(-1)
+            
+            # Prepare results
+            results = []
+            for i, prompt_data in enumerate(prompts):
+                token = self.tokenizer.decode(next_token[i].unsqueeze(0), skip_special_tokens=True)
+                logger.debug(f"Generated token for prompt '{prompt_data['prompt']}': '{token}'")
+                results.append({
+                    'request_id': prompt_data['request_id'],
+                    'token': token,
+                    'is_finished': token == self.tokenizer.eos_token
+                })
+            
+            return results
+
     @staticmethod
     def run(model_name: str, task_queue: mp.Queue, result_queue: mp.Queue):
         # Enable remote debugging
@@ -56,13 +105,18 @@ class ModelWorker:
         
         while True:
             logger.debug("Waiting for batch from queue...")
-            batch = task_queue.get()
-            logger.debug(f"Received batch: {batch}")
+            batch_data = task_queue.get()
+            logger.debug(f"Received batch: {batch_data}")
             
-            if batch is None:  # Shutdown signal
+            if batch_data is None:  # Shutdown signal
                 logger.debug("Received shutdown signal")
                 break
             
-            results = worker.generate(batch)
-            logger.debug(f"Sending results: {results}")
-            result_queue.put(results) 
+            batch, is_streaming = batch_data
+            
+            if is_streaming:
+                # Handle streaming generation
+                result_queue.put(('stream', worker.generate_forward_batch(batch)))
+            else:
+                # Handle regular generation
+                result_queue.put(('complete', worker.generate(batch)))

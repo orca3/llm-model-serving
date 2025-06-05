@@ -7,3 +7,4 @@ numpy==1.24.3
 debugpy==1.8.0
 pytest==8.0.2
 httpx==0.27.0 
+pytest-asyncio==1.0.0
