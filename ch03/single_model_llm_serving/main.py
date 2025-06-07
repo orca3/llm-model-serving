@@ -70,6 +70,15 @@ async def generate(request: BatchGenerateRequest, llm: LLM = Depends(get_llm)):
     generated_texts = llm.generate(request.prompts)
     return BatchGenerateResponse(generated_texts=generated_texts)
 
+@app.post("/generate_vllm", response_model=BatchGenerateResponse)
+async def generate_vllm(request: BatchGenerateRequest, llm: LLM = Depends(get_llm)):
+    """
+    Generate text using vLLM for multiple prompts.
+    This endpoint uses vLLM's efficient batched inference capabilities.
+    """
+    generated_texts = llm.generate_vllm(request.prompts)
+    return BatchGenerateResponse(generated_texts=generated_texts)
+
 def signal_handler(signum, frame):
     cleanup()
     exit(0)

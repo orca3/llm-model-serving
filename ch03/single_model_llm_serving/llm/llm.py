@@ -7,6 +7,8 @@ import atexit
 import threading
 import time
 import uuid
+from vllm import LLM as VLLM
+from vllm import SamplingParams
 
 class LLM:
     def __init__(self):
@@ -16,6 +18,9 @@ class LLM:
         
         # Initialize the model
         self.model_executor.setup_worker("facebook/opt-125m")
+        
+        # Initialize vLLM model
+        self.vllm_model = VLLM(model="facebook/opt-125m")
         
         # Start processing loop in a separate thread
         self.thread = threading.Thread(target=self.requests_processing_loop, daemon=True)
@@ -138,3 +143,28 @@ class LLM:
             # Clean up
             self.workload_manager.remove_finished_sequence(seq_id)
             print(f"Cleaned up sequence {seq_id}")  # Debug print
+
+    def generate_vllm(self, prompts: List[str]) -> List[str]:
+        """
+        Generate text using vLLM for multiple prompts.
+        
+        Args:
+            prompts: List of prompts to generate text for
+            
+        Returns:
+            List of generated texts
+        """
+        # Configure sampling parameters
+        sampling_params = SamplingParams(
+            temperature=0.7,
+            top_p=0.95,
+            max_tokens=self.max_tokens
+        )
+        
+        # Generate text for all prompts
+        outputs = self.vllm_model.generate(prompts, sampling_params)
+        
+        # Extract generated text from outputs
+        generated_texts = [output.outputs[0].text for output in outputs]
+        
+        return generated_texts
