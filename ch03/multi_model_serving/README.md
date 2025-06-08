@@ -66,21 +66,21 @@ For text models (sentiment analysis):
 ```bash
 curl -X POST http://localhost:8001/predict \
   -H "Content-Type: application/json" \
-  -d '{"model_id": "sentiment", "input_data": "This movie was great!"}'
+  -d '{"model_id": "550e8400-e29b-41d4-a716-446655440000", "input_data": "This movie was great!"}'
 ```
 
 For spam detection:
 ```bash
 curl -X POST http://localhost:8001/predict \
   -H "Content-Type: application/json" \
-  -d '{"model_id": "spam", "input_data": "Win a free iPhone now!"}'
+  -d '{"model_id": "6ba7b810-9dad-11d1-80b4-00c04fd430c8", "input_data": "Win a free iPhone now!"}'
 ```
 
 For image classification:
 ```bash
 curl -X POST http://localhost:8001/predict \
   -H "Content-Type: application/json" \
-  -d '{"model_id": "image", "input_data": "path/to/image.jpg"}'
+  -d '{"model_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7", "input_data": "path/to/image.jpg"}'
 ```
 
 ## Architecture

@@ -7,6 +7,7 @@ class ModelMetadata(BaseModel):
     name: str
     type: str
     framework: str
+    version: str
     description: str
 
 class ModelStore:
