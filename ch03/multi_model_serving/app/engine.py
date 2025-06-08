@@ -1,5 +1,6 @@
 from app.store import ModelMetadata
-from app.worker import ModelWorker
+from app.worker import ModelWorker, TransformerWorker, TorchVisionWorker
+from typing import Optional
 
 class ModelEngine:
     workers = {} # {model_id: worker}
@@ -7,16 +8,19 @@ class ModelEngine:
     def __init__(self):
         self.workers = {} 
     
-    def get_worker(self, model_metadata: ModelMetadata):
+    def get_worker(self, model_id: str) -> Optional[ModelWorker]:
+        return self.workers.get(model_id)
+    
+    def create_worker(self, model_metadata: ModelMetadata) -> ModelWorker:
         if model_metadata.id not in self.workers:
-            self.workers[model_metadata.id] = ModelWorker(model_metadata.id)
+            if model_metadata.framework == "transformers":
+                self.workers[model_metadata.id] = TransformerWorker(model_metadata)
+            elif model_metadata.framework == "torchvision":
+                self.workers[model_metadata.id] = TorchVisionWorker(model_metadata)
+            else:
+                raise ValueError(f"Unsupported framework: {model_metadata.framework}")
         return self.workers[model_metadata.id]
     
-    def create_worker(self, model_metadata: ModelMetadata):
-        if model_metadata.id not in self.workers:
-            self.workers[model_metadata.id] = ModelWorker(model_metadata.id)
-        return self.workers[model_metadata.id]
-    
-    def delete_worker(self, model_metadata: ModelMetadata):
-        if model_metadata.id in self.workers:
-            del self.workers[model_metadata.id]
+    def delete_worker(self, model_id: str):
+        if model_id in self.workers:
+            del self.workers[model_id]

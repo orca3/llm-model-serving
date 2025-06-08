@@ -169,23 +169,43 @@ class TestModelServing(unittest.TestCase):
 
     def test_model_cache(self):
         """Test model caching behavior"""
-        return None
-        # # Make requests to all three models in sequence
-        # for model_id in self.model_ids.values():
-        #     response = self.client.post(
-        #         "/predict",
-        #         json={
-        #             "model_id": model_id,
-        #             "input_data": "test input"
-        #         }
-        #     )
-        #     self.assertEqual(response.status_code, 200)
         
-        # # Check loaded models
-        # response = self.client.get("/models")
-        # self.assertEqual(response.status_code, 200)
-        # data = response.json()
-        # self.assertLessEqual(len(data["loaded_models"]), 2)  # Should have max 2 models loaded
+        response = self.client.post(
+            "/predict",
+            json={
+                "model_id": self.model_ids["sentiment"],
+                "input_data": self.test_data["sentiment"]["positive"]["text"]
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.post(
+            "/predict",
+            json={
+                "model_id": self.model_ids["spam"],
+                "input_data": self.test_data["spam"]["ham"]["text"]
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        test_image_path = os.path.join(os.path.dirname(__file__), "images", "cat1.jpg")
+        
+        # Test image classification
+        with open(test_image_path, "rb") as f:
+            response = self.client.post(
+                "/predict",
+                json={
+                    "model_id": self.model_ids["image"],
+                    "input_data": test_image_path
+                }
+            )
+            self.assertEqual(response.status_code, 200)
+        
+        # Check loaded models
+        response = self.client.get("/models")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertLessEqual(len(data["loaded_models"]), 2)  # Should have max 2 models loaded
 
 if __name__ == '__main__':
     unittest.main() 
