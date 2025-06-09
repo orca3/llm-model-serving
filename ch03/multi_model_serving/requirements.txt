@@ -10,4 +10,7 @@ pydantic==2.5.2
 python-multipart==0.0.6
 pytest==8.0.0
 pytest-asyncio==0.23.5
-httpx==0.26.0 
+httpx==0.26.0
+tritonclient[http]==2.41.0
+Pillow==10.2.0
+requests==2.31.0 
