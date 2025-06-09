@@ -23,6 +23,14 @@
             "framework": "torchvision",
             "version": "1.0.0",
             "description": "Image classification model"
+        },
+        {
+            "id": "8ba7b810-9dad-11d1-80b4-00c04fd430c9",
+            "name": "densenet_onnx",
+            "type": "image",
+            "framework": "triton",
+            "version": "1.0.0",
+            "description": "DenseNet image classification model served via Triton"
         }
     ]
 } 

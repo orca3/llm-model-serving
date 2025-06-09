@@ -1,5 +1,5 @@
 from app.store import ModelMetadata
-from app.worker import ModelWorker, TransformerWorker, TorchVisionWorker
+from app.worker import ModelWorker, TransformerWorker, TorchVisionWorker, TritonWorker
 from typing import Optional
 
 class ModelEngine:
@@ -17,6 +17,8 @@ class ModelEngine:
                 self.workers[model_metadata.id] = TransformerWorker(model_metadata)
             elif model_metadata.framework == "torchvision":
                 self.workers[model_metadata.id] = TorchVisionWorker(model_metadata)
+            elif model_metadata.framework == "triton":
+                self.workers[model_metadata.id] = TritonWorker(model_metadata)
             else:
                 raise ValueError(f"Unsupported framework: {model_metadata.framework}")
         return self.workers[model_metadata.id]

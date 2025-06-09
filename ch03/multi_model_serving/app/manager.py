@@ -28,6 +28,11 @@ class ModelManager:
             # Remove least recently used model
             id, model_worker = self.model_cache.popitem(last=False)
             self.model_engine.delete_worker(id)
+            
+        # Download model if not already downloaded
+        # Skip the downlaod implementation for simplicity
+        # if not self.model_store.model_exists(model_id):
+        #     self.model_store.download_model(model_id)
         
         # Create and cache new model worker
         self.model_cache[model_id] = self.model_engine.create_worker(model_metadata)
