@@ -24,26 +24,44 @@ class ModelWorker:
     
     def generate(self, prompts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         logger.debug(f"Received prompts: {prompts}")
-        results = []
-        for prompt_data in prompts:
-            inputs = self.tokenizer(prompt_data.prompt, return_tensors="pt").to(self.device)
-            
-            # Generate text
-            with torch.no_grad():
-                outputs = self.model.generate(
-                    inputs.input_ids,
-                    max_length=50,
-                    num_return_sequences=1,
-                    pad_token_id=self.tokenizer.eos_token_id
-                )
-            
-            generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-            logger.debug(f"Generated text: {generated_text}")
-            
-            results.append({
-                'request_id': prompt_data.id,
+        
+        # Extract prompts and request IDs
+        prompt_texts = [p.prompt for p in prompts]
+        request_ids = [p.id for p in prompts]
+        
+        # Tokenize all prompts in batch
+        inputs = self.tokenizer(
+            prompt_texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=512
+        ).to(self.device)
+        
+        logger.debug(f"Batch input shape: {inputs.input_ids.shape}")
+        
+        # Generate text for all prompts in one batch
+        with torch.no_grad():
+            outputs = self.model.generate(
+                inputs.input_ids,
+                attention_mask=inputs.attention_mask,
+                max_length=50,
+                num_return_sequences=1,
+                pad_token_id=self.tokenizer.eos_token_id
+            )
+        
+        # Decode all outputs
+        generated_texts = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
+        logger.debug(f"Generated texts: {generated_texts}")
+        
+        # Map results back to request IDs
+        results = [
+            {
+                'request_id': request_id,
                 'generated_text': generated_text
-            })
+            }
+            for request_id, generated_text in zip(request_ids, generated_texts)
+        ]
         
         return results
 
