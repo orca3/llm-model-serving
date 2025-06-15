@@ -1,12 +1,12 @@
 setuptools==77.0.3
-fastapi==0.115.0
+fastapi==0.115.12
 uvicorn==0.24.0
-pydantic==2.9
-transformers==4.51.1
+pydantic==2.11.5
+transformers==4.52.4
 torch==2.7.0
-numpy==1.26.0
+numpy==1.26.4
 debugpy==1.8.0
-pytest==8.2.0
+pytest==8.4.0
 httpx==0.27.0 
 pytest-asyncio==1.0.0
 vllm==0.9.0.1

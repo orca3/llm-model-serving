@@ -1,7 +1,7 @@
 from fastapi import FastAPI, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from llm import LLM
+from llm import LLMEngine
 from typing import List
 import asyncio
 import multiprocessing
@@ -28,7 +28,7 @@ def get_llm():
     global _llm
     with _llm_lock:
         if _llm is None:
-            _llm = LLM()
+            _llm = LLMEngine()
             # Register cleanup
             atexit.register(cleanup)
         return _llm
@@ -46,7 +46,7 @@ class BatchGenerateResponse(BaseModel):
     generated_texts: List[str]
 
 @app.post("/generate_stream")
-async def generate_stream(request: GenerateRequest, llm: LLM = Depends(get_llm)):
+async def generate_stream(request: GenerateRequest, llm: LLMEngine = Depends(get_llm)):
     async def event_generator():
         loop = asyncio.get_event_loop()
         async for token in llm.event_generator(loop, request.prompt):
@@ -60,18 +60,18 @@ async def generate_stream(request: GenerateRequest, llm: LLM = Depends(get_llm))
 
 # process 1 request with only one prompt at a time.
 @app.post("/basic_generate", response_model=GenerateResponse)
-async def basic_generate(request: GenerateRequest, llm: LLM = Depends(get_llm)):
+async def basic_generate(request: GenerateRequest, llm: LLMEngine = Depends(get_llm)):
     generated_text = llm.basic_generate(request.prompt)
     return GenerateResponse(generated_text=generated_text)
 
 # process multiple prompts in a request
 @app.post("/generate", response_model=BatchGenerateResponse)
-async def generate(request: BatchGenerateRequest, llm: LLM = Depends(get_llm)):
+async def generate(request: BatchGenerateRequest, llm: LLMEngine = Depends(get_llm)):
     generated_texts = llm.generate(request.prompts)
     return BatchGenerateResponse(generated_texts=generated_texts)
 
 @app.post("/generate_vllm", response_model=BatchGenerateResponse)
-async def generate_vllm(request: BatchGenerateRequest, llm: LLM = Depends(get_llm)):
+async def generate_vllm(request: BatchGenerateRequest, llm: LLMEngine = Depends(get_llm)):
     """
     Generate text using vLLM for multiple prompts.
     This endpoint uses vLLM's efficient batched inference capabilities.

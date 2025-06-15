@@ -1,3 +1,3 @@
-from .llm import LLM
+from .llm import LLMEngine
 
-__all__ = ['LLM'] 
+__all__ = ['LLMEngine'] 

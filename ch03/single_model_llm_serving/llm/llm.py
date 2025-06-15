@@ -10,7 +10,7 @@ import uuid
 from vllm import LLM as VLLM
 from vllm import SamplingParams
 
-class LLM:
+class LLMEngine:
     def __init__(self):
         self.model_executor = ModelExecutor()
         self.workload_manager = WorkloadManager()
