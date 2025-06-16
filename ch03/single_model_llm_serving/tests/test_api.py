@@ -53,7 +53,8 @@ def test_generate_batch(client):
         "Hello, I am",
         "The weather is",
         "I want to",
-        "The best way to"
+        "The best way to", 
+        "The most efficient way to"
     ]
     
     response = client.post(

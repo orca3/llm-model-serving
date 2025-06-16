@@ -81,6 +81,12 @@ class LLMEngine:
         results = self.model_executor.execute_batch([sequence])
         
         return results[1][0]['generated_text']
+    
+    def _is_batch_finished(self, request_ids: List[str]) -> bool:
+        for id in request_ids:
+            if not self.workload_manager.is_sequence_finished(id):
+                return False
+        return True
 
     # process multiple prompts in a request
     def generate(self, prompts: List[str]) -> List[str]:
@@ -90,30 +96,28 @@ class LLMEngine:
             request_id = self.workload_manager.add_request(prompt)
             request_ids.append(request_id)
         
-        # Process all requests in batches
-        all_results = []
-        while True:
+        # Process requests in batches (from LoadManager) until all prompts of the request are finished
+        while not self._is_batch_finished(request_ids):
             # Get next batch of requests
             sequences = self.workload_manager.get_next_batch()
             if not sequences:
-                break
+                time.sleep(0.1)
+                continue
                 
-            # Execute the batch in one go
+            # Execute the next batch in one go, it may not be the same prompts as the prompts in the request.
             results = self.model_executor.execute_batch(sequences)
-            all_results.extend(results)
         
-            # Map results back to original prompts
-            generated_texts = []
-            for request_id in request_ids:
-                for result in all_results[1]:
-                    if result['request_id'] == request_id:
-                        generated_texts.append(result['generated_text'])
-                        self.workload_manager.remove_finished_sequence(result['request_id'])
-                        self.workload_manager.update_sequence_output(result['request_id'], result['generated_text'])
-                        break
-                else:
-                    raise Exception(f"Result not found for request {request_id}")
-        
+            # Update results in workload manager
+            for result in results[1]:
+                self.workload_manager.remove_active_sequence(result['request_id'])
+                self.workload_manager.update_sequence_output(result['request_id'], result['generated_text'], is_finished=True)
+
+        # Remove finished sequences from workload manager
+        generated_texts = []
+        for request_id in request_ids:
+            generated_texts.append(self.workload_manager.get_sequence(request_id).output[0])
+            self.workload_manager.remove_finished_sequence(request_id)
+
         return generated_texts 
     
     async def event_generator(self, loop, prompt: str):

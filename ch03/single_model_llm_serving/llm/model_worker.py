@@ -45,7 +45,7 @@ class ModelWorker:
             outputs = self.model.generate(
                 inputs.input_ids,
                 attention_mask=inputs.attention_mask,
-                max_length=50,
+                max_new_tokens=50,  # Generate up to 50 new tokens
                 num_return_sequences=1,
                 pad_token_id=self.tokenizer.eos_token_id
             )

@@ -53,6 +53,14 @@ class WorkloadManager:
                 
             return self.active_sequences
     
+    def remove_active_sequence(self, seq_id: str):
+        if seq_id in self.sequence_map:
+            sequence = self.sequence_map[seq_id]
+            if sequence in self.active_sequences:
+                self.active_sequences.remove(sequence)
+            if sequence in self.active_streaming_sequences:
+                self.active_streaming_sequences.remove(sequence)
+    
     def remove_finished_sequence(self, seq_id: str):
         if seq_id in self.sequence_map:
             sequence = self.sequence_map[seq_id]
@@ -61,15 +69,22 @@ class WorkloadManager:
             if sequence in self.active_streaming_sequences:
                 self.active_streaming_sequences.remove(sequence)
             del self.sequence_map[seq_id]
+            
+    def is_sequence_finished(self, seq_id: str) -> bool:
+        if seq_id in self.sequence_map:
+            sequence = self.sequence_map[seq_id]
+            return sequence.finished
+        return False
     
     def get_sequence(self, seq_id: str) -> Optional[Sequence]:
         return self.sequence_map.get(seq_id)
     
-    def update_sequence_output(self, seq_id: str, token: str):
+    def update_sequence_output(self, seq_id: str, token: str, is_finished: bool = False):
         if seq_id in self.sequence_map:
             sequence = self.sequence_map[seq_id]
             sequence.output.append(token)
             sequence.prompt += token
             sequence.token_count += 1
+            sequence.finished = is_finished
             return sequence
         return None 
