@@ -1,0 +1,23 @@
+# OpenAI Configuration
+OPENAI_API_KEY=your-openai-api-key-here
+
+# Model Configuration
+LLM_MODEL=gpt-4
+EMBEDDING_MODEL=text-embedding-3-small
+
+# Vector Database Configuration
+VECTOR_DB_PATH=./vector_db
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=200
+
+# Knowledge Base Configuration
+KNOWLEDGE_FOLDER=./knowledge_files
+
+# Agent Configuration
+MAX_TOKENS=4096
+TEMPERATURE=0.7
+
+# User Profile Configuration (optional)
+# EXPERTISE_LEVEL=intermediate
+# BACKGROUND=technical
+# PREFERRED_DETAIL_LEVEL=moderate 

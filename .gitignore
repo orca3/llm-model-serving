@@ -19,3 +19,4 @@ llama-2-7b.Q2_K.gguf
 ch03/single_model_llm_serving/model_cache/*
 venv/*
 */venv/
+.env
