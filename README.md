@@ -8,7 +8,7 @@
   <img src="cover.png" alt="Hands-On LLM Serving and Optimization" width="320" align="right" />
 </a>
 
-📘 **[Read on O'Reilly](https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/)** · 🛒 **[Buy on Amazon](https://www.amazon.com/Hands-LLM-Serving-Optimization-Hosting/dp/B0G48JRRMF)**
+🌐 **[Book Website](https://orca3.github.io/llm-model-serving/)** · 📘 **[Read on O'Reilly](https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/)** · 🛒 **[Buy on Amazon](https://www.amazon.com/Hands-LLM-Serving-Optimization-Hosting/dp/B0G48JRRMF)**
 
 This repository contains the companion source code, notebooks, and examples for the book.
 
