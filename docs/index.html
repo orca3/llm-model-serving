@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hands-On LLM Serving and Optimization &mdash; Chi Wang &amp; Peiheng Hu</title>
+  <meta name="description" content="Hands-On LLM Serving and Optimization: Hosting LLMs at Scale. A hands-on, engineering-focused guide to deploying and optimizing large language models, by Chi Wang and Peiheng Hu (O'Reilly)." />
+
+  <!-- Open Graph / social cards -->
+  <meta property="og:type" content="book" />
+  <meta property="og:title" content="Hands-On LLM Serving and Optimization" />
+  <meta property="og:description" content="Hosting LLMs at Scale — a hands-on, engineering-focused guide to deploying and optimizing large language models. By Chi Wang & Peiheng Hu (O'Reilly)." />
+  <meta property="og:image" content="cover.png" />
+
+  <style>
+    :root {
+      --bg: #faf8f4;
+      --panel: #ffffff;
+      --ink: #1c1b19;
+      --muted: #5d5a54;
+      --rule: #e7e2d8;
+      --accent: #b5402a;       /* O'Reilly-ish warm red */
+      --accent-dark: #8c2f1f;
+      --link: #1c4e80;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+                   "Georgia", serif;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- Hero ---------- */
+    header.hero {
+      border-bottom: 1px solid var(--rule);
+      background: linear-gradient(180deg, #fffdf9 0%, var(--bg) 100%);
+    }
+    .hero-inner {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      padding: 64px 24px 56px;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .hero-cover {
+      flex: 0 0 auto;
+      width: 280px;
+      max-width: 40vw;
+    }
+    .hero-cover img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 18px 40px rgba(40, 30, 20, 0.22),
+                  0 2px 6px rgba(40, 30, 20, 0.12);
+    }
+    .hero-text { flex: 1 1 auto; min-width: 0; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0 0 14px;
+    }
+    h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.08;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+    .subtitle {
+      font-size: clamp(18px, 2.4vw, 23px);
+      color: var(--muted);
+      margin: 0 0 22px;
+      font-style: italic;
+    }
+    .byline { font-size: 18px; margin: 0 0 28px; color: var(--ink); }
+    .byline a { font-weight: 600; }
+
+    .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-block;
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: transform .05s ease, box-shadow .15s ease;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(181, 64, 42, 0.28);
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-ghost {
+      background: var(--panel);
+      color: var(--ink);
+      border-color: var(--rule);
+    }
+    .btn-ghost:hover { border-color: #cfc8ba; }
+
+    /* ---------- Sections ---------- */
+    section { padding: 52px 0; border-bottom: 1px solid var(--rule); }
+    section:last-of-type { border-bottom: none; }
+    h2 {
+      font-size: 28px;
+      margin: 0 0 22px;
+      letter-spacing: -0.01em;
+    }
+    h2 .lead-rule {
+      display: inline-block;
+      width: 38px; height: 3px;
+      background: var(--accent);
+      vertical-align: middle;
+      margin-right: 14px;
+      border-radius: 2px;
+    }
+    p { margin: 0 0 18px; }
+    .muted { color: var(--muted); }
+
+    /* learn cards */
+    .learn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 6px;
+    }
+    .learn-card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .learn-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--accent-dark);
+    }
+    .learn-card p { margin: 0; font-size: 16px; color: var(--muted); line-height: 1.55; }
+
+    /* praise / quotes */
+    .quotes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+      margin-top: 6px;
+    }
+    figure.quote {
+      margin: 0;
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 24px 26px;
+      position: relative;
+    }
+    figure.quote::before {
+      content: "\201C";
+      position: absolute;
+      top: 4px; left: 16px;
+      font-size: 64px;
+      line-height: 1;
+      color: var(--rule);
+      font-family: Georgia, serif;
+    }
+    figure.quote blockquote {
+      margin: 0 0 14px;
+      padding-top: 10px;
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+    figure.quote figcaption {
+      font-size: 14.5px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    figure.quote figcaption .name { font-weight: 700; color: var(--ink); }
+
+    /* GPU callout */
+    .callout {
+      background: #fff7ed;
+      border: 1px solid #f0d9bf;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 22px;
+      font-size: 16px;
+    }
+    .callout strong { color: var(--accent-dark); }
+
+    /* chapter list */
+    ol.chapters { list-style: none; counter-reset: ch; margin: 0; padding: 0; }
+    ol.chapters li {
+      counter-increment: ch;
+      position: relative;
+      padding: 16px 0 16px 64px;
+      border-top: 1px solid var(--rule);
+    }
+    ol.chapters li:first-child { border-top: none; }
+    ol.chapters li::before {
+      content: counter(ch);
+      position: absolute;
+      left: 0; top: 16px;
+      width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--accent);
+    }
+    ol.chapters .ch-title { font-weight: 600; font-size: 18px; }
+    ol.chapters .ch-desc { font-size: 16px; color: var(--muted); line-height: 1.55; margin-top: 3px; }
+
+    /* authors */
+    .authors { display: flex; flex-wrap: wrap; gap: 28px; }
+    .author {
+      flex: 1 1 260px;
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 22px 24px;
+    }
+    .author h3 { margin: 0 0 6px; font-size: 20px; }
+    .author p { margin: 0; font-size: 16px; color: var(--muted); }
+
+    /* code/repo links */
+    .repo-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+    .repo-pill {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    /* footer */
+    footer {
+      padding: 40px 0 56px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    footer a { color: var(--muted); text-decoration: underline; }
+
+    /* mobile */
+    @media (max-width: 720px) {
+      .hero-inner { flex-direction: column; text-align: center; gap: 28px; padding: 44px 24px 40px; }
+      .hero-cover { width: 220px; max-width: 60vw; }
+      .buttons { justify-content: center; }
+      body { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-cover">
+        <a href="https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/">
+          <img src="cover.png" alt="Hands-On LLM Serving and Optimization book cover" />
+        </a>
+      </div>
+      <div class="hero-text">
+        <p class="eyebrow">O&rsquo;Reilly Media</p>
+        <h1>Hands-On LLM Serving and Optimization</h1>
+        <p class="subtitle">Hosting LLMs at Scale</p>
+        <p class="byline">
+          by <a href="https://www.linkedin.com/in/chi-wang-07b24730/">Chi Wang</a>
+          &amp; <a href="https://www.linkedin.com/in/peihenghu/">Peiheng Hu</a>
+        </p>
+        <div class="buttons">
+          <a class="btn btn-primary" href="https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/">Read on O&rsquo;Reilly</a>
+          <a class="btn btn-ghost" href="https://www.amazon.com/Hands-LLM-Serving-Optimization-Hosting/dp/B0G48JRRMF">Buy on Amazon</a>
+          <a class="btn btn-ghost" href="https://github.com/orca3/llm-model-serving">Code &amp; Notebooks</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="about">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>The Inference Era</h2>
+        <p>
+          Large language models (LLMs) are the reasoning engines of modern AI. Today, a
+          major inflection point has arrived: as the world races to deploy AI at scale,
+          model inference has moved to the center of the stack. Welcome to the inference
+          era.
+        </p>
+        <p>
+          Without proper optimization, however, LLMs can be expensive and slow to serve.
+          <em>Hands-On LLM Serving and Optimization</em> is a comprehensive guide to the
+          complexities of deploying and optimizing LLMs at scale.
+        </p>
+        <p>
+          In this hands-on, engineering-focused book, authors Chi Wang and Peiheng Hu
+          combine practical examples, code, and strategies for building robust, performant,
+          and cost-efficient AI token factories. Whether you&rsquo;re building the LLM
+          inference infrastructure or the applications that consume it, a deep
+          understanding of LLM serving will make you a more effective, future-ready
+          engineer as AI transforms how we work and build.
+        </p>
+      </div>
+    </section>
+
+    <section id="praise">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>Praise for the Book</h2>
+        <div class="quotes">
+          <figure class="quote">
+            <blockquote>
+              Most AI teams treat LLM serving as an afterthought until real traffic hits.
+              This book provides the technical intuition and hands-on understanding every
+              developer needs, from KV caching to speculative decoding, to tackle the
+              hardest questions that arise while configuring serving infrastructure needed
+              to deploy agents in production.
+            </blockquote>
+            <figcaption>
+              <span class="name">Vineeth Kalluru</span><br />
+              Enterprise AI Architect; former engineer at Google Cloud TPU and Sambanova Systems
+            </figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>
+              The missing manual for LLM serving and inference &mdash; comprehensive
+              coverage of LLM serving challenges and optimization techniques such as scaling
+              attention, multi-node inferencing, and disaggregation, with real-world
+              examples. Essential reading for anyone scaling AI infrastructure.
+            </blockquote>
+            <figcaption>
+              <span class="name">Winnie Kwon</span><br />
+              Engineering Manager, Broadcom
+            </figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>
+              <em>Hands-On LLM Serving and Optimization</em> delivers real-world insight
+              into the model serving architectures and optimization techniques required to
+              build scalable, efficient LLM inference systems. Its hands-on approach makes
+              complex LLM serving concepts accessible for anyone.
+            </blockquote>
+            <figcaption>
+              <span class="name">Patrice Castonguay</span><br />
+              Engineering leader in LLM inference
+            </figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>
+              As LLMs become core to modern AI platforms, this book offers a practical
+              roadmap for serving and optimizing LLMs at scale &mdash; handling large
+              workloads with reliability and cost efficiency.
+            </blockquote>
+            <figcaption>
+              <span class="name">Bhavesh Doshi</span><br />
+              Vice President (VP) of AI Cloud, Salesforce
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>What You&rsquo;ll Learn</h2>
+        <div class="learn-grid">
+          <div class="learn-card">
+            <h3>Foundations</h3>
+            <p>Learn the foundations of model serving with core concepts, design paradigms, and industry best practices.</p>
+          </div>
+          <div class="learn-card">
+            <h3>Challenges at Scale</h3>
+            <p>Understand the common challenges of hosting LLMs at scale.</p>
+          </div>
+          <div class="learn-card">
+            <h3>Latency &amp; Throughput</h3>
+            <p>Balance latency and throughput to meet the demands of AI applications and business requirements.</p>
+          </div>
+          <div class="learn-card">
+            <h3>Cost Efficiency</h3>
+            <p>Host LLMs cost-effectively with practical, code-backed techniques.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contents">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>Book Contents</h2>
+        <ol class="chapters">
+          <li>
+            <div class="ch-title">Introduction to Model Serving and Optimization</div>
+            <div class="ch-desc">Anatomy of a model, the model lifecycle, what model serving is and why we optimize it, serving paradigms (edge, single-model, multi-model), and serving platforms.</div>
+          </li>
+          <li>
+            <div class="ch-title">Large Language Model Serving</div>
+            <div class="ch-desc">Inside the transformer, autoregressive generation, decoder-only architecture, attention, the KV cache, prefill and decode, and running LLMs with a serving framework (vLLM).</div>
+          </li>
+          <li>
+            <div class="ch-title">Model-Serving System Design: A Deep Dive</div>
+            <div class="ch-desc">Building online single-model and multi-model serving services from scratch, batching and streaming, NVIDIA Triton, and cost- vs. latency-optimized designs.</div>
+          </li>
+          <li>
+            <div class="ch-title">Model Serving Best Practices</div>
+            <div class="ch-desc">Serving in an agentic world (agents, RAG, CAG), enterprise serving architecture, building with an open source stack or a cloud vendor, build-or-buy strategy, and performance measurement.</div>
+          </li>
+          <li>
+            <div class="ch-title">Challenges When Serving LLMs</div>
+            <div class="ch-desc">Why optimization matters, accelerator chips and GPU specs, model-loading bottlenecks, KV cache sizing, and arithmetic-intensity analysis of prefill and decode.</div>
+          </li>
+          <li>
+            <div class="ch-title">Essential LLM Optimization Techniques</div>
+            <div class="ch-desc">Request batching and scheduling (dynamic, continuous, chunked prefill), scalable attention and kernel fusion, model compression (quantization, distillation, pruning), and prefix caching / RadixAttention.</div>
+          </li>
+          <li>
+            <div class="ch-title">Advanced LLM Optimization Techniques</div>
+            <div class="ch-desc">Speculative decoding, multi-GPU and multinode inference (data/tensor/pipeline/expert parallelism), prefill&ndash;decode disaggregation, and advanced KV caching for long-context serving.</div>
+          </li>
+          <li>
+            <div class="ch-title">LLM Serving Frameworks</div>
+            <div class="ch-desc">vLLM internals (architecture, scheduler, layered optimization), TensorRT-LLM, SGLang, llama.cpp, and how to select the right framework.</div>
+          </li>
+          <li>
+            <div class="ch-title">LLM Optimization in Practice</div>
+            <div class="ch-desc">A step-by-step optimization plan for Qwen3-14B with vLLM, from hardware inspection and benchmarking to quantization, distributed serving, and common trade-offs.</div>
+          </li>
+          <li>
+            <div class="ch-title">Advancements in LLM Serving</div>
+            <div class="ch-desc">Semantic caching, performance profiling, multimodal serving, edge AI, multi-LoRA serving, and model serving in reinforcement learning.</div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="code">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>Code &amp; Notebooks</h2>
+        <p>
+          All companion source code, notebooks, and examples are organized by chapter in
+          the GitHub repository &mdash; from from-scratch serving services to vLLM,
+          TensorRT-LLM, SGLang, quantization, speculative decoding, and end-to-end
+          optimization benchmarks.
+        </p>
+        <div class="callout">
+          &#9889; <strong>GPU recommended.</strong> Many of the notebooks and examples
+          (vLLM, TensorRT-LLM, speculative decoding, distributed serving, quantization)
+          require an NVIDIA GPU to run. If you don&rsquo;t have local GPU access, we
+          recommend <a href="https://colab.research.google.com/">Google Colab</a>, which
+          offers great GPU support on a convenient pay-as-you-go basis &mdash; just upload a
+          notebook, select a GPU runtime, and go.
+        </div>
+        <div class="repo-links">
+          <a class="repo-pill" href="https://github.com/orca3/llm-model-serving">GitHub Repository</a>
+          <a class="repo-pill" href="https://colab.research.google.com/">Run on Google Colab</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="authors">
+      <div class="wrap">
+        <h2><span class="lead-rule"></span>About the Authors</h2>
+        <div class="authors">
+          <div class="author">
+            <h3><a href="https://www.linkedin.com/in/chi-wang-07b24730/">Chi Wang</a></h3>
+            <p>Co-author of <em>Hands-On LLM Serving and Optimization</em>.</p>
+          </div>
+          <div class="author">
+            <h3><a href="https://www.linkedin.com/in/peihenghu/">Peiheng Hu</a></h3>
+            <p>Co-author of <em>Hands-On LLM Serving and Optimization</em>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      &copy; <span id="year">2026</span> Chi Wang &amp; Peiheng Hu &middot;
+      Published by O&rsquo;Reilly Media &middot;
+      <a href="https://github.com/orca3/llm-model-serving">Source on GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
