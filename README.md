@@ -8,7 +8,7 @@
   <img src="cover.png" alt="Hands-On LLM Serving and Optimization" width="320" align="right" />
 </a>
 
-🌐 **[Book Website](https://orca3.github.io/llm-model-serving/)** · 📘 **[Read on O'Reilly](https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/)** · 🛒 **[Buy on Amazon](https://www.amazon.com/Hands-LLM-Serving-Optimization-Hosting/dp/B0G48JRRMF)**
+🌐 **[Book Website](https://orca3.github.io/llm-model-inference/)** · 📘 **[Read on O'Reilly](https://www.oreilly.com/library/view/hands-on-llm-serving/9798341621480/)** · 🛒 **[Buy on Amazon](https://www.amazon.com/Hands-LLM-Serving-Optimization-Hosting/dp/B0G48JRRMF)**
 
 This repository contains the companion source code, notebooks, and examples for the book.
 
@@ -109,8 +109,8 @@ and/or `README.md` with setup and run instructions. A typical workflow:
 
 ```bash
 # Clone the repo
-git clone https://github.com/orca3/llm-model-serving.git
-cd llm-model-serving
+git clone https://github.com/orca3/llm-model-inference.git
+cd llm-model-inference
 
 # For a given example, create an environment and install its dependencies, e.g.:
 cd ch03/single_model_llm_serving
